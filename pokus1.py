@@ -2,8 +2,10 @@ from typing import Any
 
 import pygame
 import random
+import os
 
 pygame.init()
+pygame.mixer.init()
 
 display_width = 1600
 display_height = 900
@@ -46,6 +48,9 @@ pause = False
 
 # REGISTER USER EVENTS
 OBSTACLE_DODGED = pygame.USEREVENT + 1
+
+# SOUNDS
+ouch = pygame.mixer.Sound('thud-kick_C_minor.wav')
 
 
 class Button:
@@ -315,6 +320,7 @@ def game_loop():
 
         # handle car crash
         if pygame.sprite.spritecollideany(car_obj, obstacle_sprites):
+            pygame.mixer.Sound.play(ouch)
             crash()
 
         pygame.display.update()
