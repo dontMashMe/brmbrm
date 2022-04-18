@@ -57,6 +57,9 @@ class Button:
         self.rect.topleft = (x, y)
         self.clicked = False
 
+    def draw(self) -> None:
+        game_display.blit(self.image, self.rect.topleft)
+
 
 class Car(pygame.sprite.Sprite):
     def __init__(self, image, car_h, car_w, starting_pos_x, starting_pos_y):
@@ -232,7 +235,6 @@ def spawn_obstacle(speed_multiplier) -> Obstacle:
 
 
 def game_loop():
-    global a
     global pause
 
     # init relevant vars
@@ -259,8 +261,12 @@ def game_loop():
     all_sprites.add(obstacle_obj)
     obstacle_sprites.add(obstacle_obj)
 
+    # button
+    button_back = Button(0, 0, dugme, 0.5)
+
     while not game_exit:
 
+        mouse_coordinates = pygame.mouse.get_pos()
         # EVENT LOOP
         for event in pygame.event.get():
 
@@ -286,16 +292,15 @@ def game_loop():
                     pause = True
                     paused()
             # handle mouse click
-            """
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if button_back.rect.collidepoint(mouse_coordinates):
-                        print("EPIC EPIC EPIC")
-            """
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if button_back.rect.collidepoint(mouse_coordinates):
+                    game_intro()
 
         # draw relevant UI
         draw_background()
         display_score(obstacles_dodged)
-
+        button_back.draw()
         # REMOVE THIS
         pygame.draw.rect(game_display, "RED", car_obj.rect)
         pygame.draw.rect(game_display, "RED", obstacle_obj.rect)
